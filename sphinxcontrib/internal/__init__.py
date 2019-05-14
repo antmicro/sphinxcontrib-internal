@@ -38,21 +38,31 @@ def process_internal_nodes(app, doctree, docname):
     ns = dict((confval.name, confval.value) for confval in app.config)
     ns.update(app.config.__dict__.copy())
     ns['builder'] = app.builder.name
+    show = False
+    print app.builder.name
+    # print app.config.__dict__
+    print app.builder.name == 'html' and ('show_internal_html' in app.config) and app.config.show_internal_html
+    if app.builder.name == 'html' and ('show_internal_html' in app.config) and app.config.show_internal_html:
+        show = True
+    elif 'internal' in app.tags:
+        show = True
+
     for node in doctree.traverse(internal):
-        if 'internal' not in app.tags:
-            node.replace_self([])
-        else:
+        if show:
             admonition = nodes.admonition(node.rawsource, *node.children, **node.attributes)
             title = nodes.title('', 'Internal')
             admonition.insert(0, title)
             admonition['classes'].append('error')
             admonition['classes'].append('internal')
             node.replace_self(admonition)
+        else:
+            node.replace_self([])
 
 
 def setup(app):
     # type: (Sphinx) -> Dict[unicode, Any]
     app.add_node(internal)
     app.add_directive('internal', Internal)
+    app.add_config_value('show_internal_html', False, True)
     app.connect('doctree-resolved', process_internal_nodes)
     return {'version': sphinx.__display_version__, 'parallel_read_safe': True}
