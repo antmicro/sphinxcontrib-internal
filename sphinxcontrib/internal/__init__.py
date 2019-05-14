@@ -39,9 +39,6 @@ def process_internal_nodes(app, doctree, docname):
     ns.update(app.config.__dict__.copy())
     ns['builder'] = app.builder.name
     show = False
-    print app.builder.name
-    # print app.config.__dict__
-    print app.builder.name == 'html' and ('show_internal_html' in app.config) and app.config.show_internal_html
     if app.builder.name == 'html' and ('show_internal_html' in app.config) and app.config.show_internal_html:
         show = True
     elif 'internal' in app.tags:
