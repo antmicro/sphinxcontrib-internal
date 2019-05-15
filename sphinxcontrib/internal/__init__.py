@@ -60,6 +60,6 @@ def setup(app):
     # type: (Sphinx) -> Dict[unicode, Any]
     app.add_node(internal)
     app.add_directive('internal', Internal)
-    app.add_config_value('show_internal_html', False, True)
+    app.add_config_value('show_internal_html', True, True)
     app.connect('doctree-resolved', process_internal_nodes)
     return {'version': sphinx.__display_version__, 'parallel_read_safe': True}
